@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Калькулятор Яны </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff0f5 0%, #e6e6fa 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator {
+            width: 500px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(221, 160, 221, 0.3),
+                        0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(221, 160, 221, 0.5);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #663399;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
+        }
+
+        .display-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .display {
+            flex: 1;
+            background: #fffaf0;
+            border: 2px solid #dda0dd;
+            border-radius: 20px;
+            padding: 15px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #663399;
+            text-align: right;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .yana-avatar {
+            background: #ffb6c1;
+            border: 2px solid #dda0dd;
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #663399;
+            min-width: 100px;
+        }
+
+        .meme-section {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid #dda0dd;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .meme-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #663399;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .meme-text {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #663399;
+            min-height: 80px;
+            line-height: 1.4;
+            border: 1px solid #dda0dd;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .button {
+            background: #ffdae0;
+            border: 2px solid #dda0dd;
+            border-radius: 15px;
+            padding: 15px 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #663399;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .button:hover {
+            background: #ffb6c1;
+            transform: scale(1.02);
+            border-color: #dda0dd;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
+        }
+
+        .button:active {
+            transform: scale(0.98);
+        }
+
+        .animal-button {
+            background: #ffd0b5;
+            font-size: 24px;
+        }
+
+        .meme-button-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .meme-button {
+            background: #ffc0a0;
+            border: 2px solid #dda0dd;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #663399;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #dda0dd;
+        }
+
+        .meme-button:hover {
+            background: #ffa07a;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 160, 122, 0.4);
+        }
+
+        .status {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid #dda0dd;
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-style: italic;
+            color: #663399;
+            margin-top: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #663399;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="calculator">
+    <div class="title">Калькулятор Яны </div>
+
+    <!-- Дисплей и аватар -->
+    <div class="display-container">
+        <input type="text" class="display" id="display" value="0" readonly>
+        <div class="yana-avatar" id="yanaAvatar">
+            <span>👧 Яна</span>
+            <span id="yanaOperator"></span>
+        </div>
+    </div>
+
+    <!-- Секция с мемами -->
+    <div class="meme-section">
+        <div class="meme-title">
+            <span>🔥 ЯНЫ. ИХ МНОГО...</span>
+        </div>
+        <div class="meme-text" id="memeText">
+            Загрузка мема...
+        </div>
+    </div>
+
+    <!-- Кнопки калькулятора -->
+    <div class="buttons">
+        <div class="button" onclick="clearAll()">C</div>
+        <div class="button" onclick="backspace()">⌫</div>
+        <div class="button animal-button" onclick="showPanda()">🐼</div>
+        <div class="button" onclick="setOperator('÷')">÷</div>
+
+        <div class="button" onclick="appendNumber('7')">7</div>
+        <div class="button" onclick="appendNumber('8')">8</div>
+        <div class="button" onclick="appendNumber('9')">9</div>
+        <div class="button" onclick="setOperator('×')">×</div>
+
+        <div class="button" onclick="appendNumber('4')">4</div>
+        <div class="button" onclick="appendNumber('5')">5</div>
+        <div class="button" onclick="appendNumber('6')">6</div>
+        <div class="button" onclick="setOperator('-')">-</div>
+
+        <div class="button" onclick="appendNumber('1')">1</div>
+        <div class="button" onclick="appendNumber('2')">2</div>
+        <div class="button" onclick="appendNumber('3')">3</div>
+        <div class="button" onclick="setOperator('+')">+</div>
+
+        <div class="button animal-button" onclick="showPenguin()">🐧</div>
+        <div class="button" onclick="appendNumber('0')">0</div>
+        <div class="button" onclick="appendNumber('.')">.</div>
+        <div class="button" onclick="calculate()">=</div>
+    </div>
+
+    <!-- Кнопка нового мема -->
+    <div class="meme-button-container">
+        <div class="meme-button" onclick="showNewMeme()">🔥 НОВЫЙ ХУИСОС</div>
+    </div>
+
+    <!-- Статус -->
+    <div class="status" id="status">
+        Яна в деле!
+    </div>
+
+    <div class="footer">
+        🌸 Created with love for Yana 🌸
+    </div>
+</div>
+
+<script>
+    // Переменные для вычислений
+    let num1 = 0;
+    let num2 = 0;
+    let operator = '';
+    let isNewOperation = true;
+
+    // Массив мемов
+    const memes = [
+        "ЯНА: 'Кто не умеет считать, тот идёт нахуй, уёбище ебаное' ",
+        "ЯНА: '150 + 150 = ? ... Легкотня)' 💅",
+        "ЯНА: 'Погнали считать, ублюдки!' 🚀",
+        "ЯНА: 'Это вам не шутки шутить, это математика твою мать!' 📚",
+        "ЯНА: 'ДЕЛЕНИЕ? Легко! Я же не дура, не то что ты!' ",
+        "ЯНА: 'Сложение — моя стихия, кмс по каллориям' ⚡",
+        "ЯНА: 'Калькулятор — лучший друг Яны' 💕",
+        "ЯНА: 'Считаю быстрее, чем можно сбить бабок ' ",
+        "ЯНА: 'Ой, всё, я запуталась... Шучу!' ",
+        "ЯНА: 'Математика царица наук, а Яна царица чикенбургеров' ",
+        "ЯНА: 'Кто не решит пример — тот чмо ебаное' ",
+        "ЯНА: 'Ноль? А кто это?' ",
+        "ЯНА: 'Бесконечность не предел, особенно для Яны' ∞",
+        "ЯНА: 'Погнали на 100%!' 🔥",
+        "ЯНА: 'Я ща как посчитаю!' "
+    ];
+
+    // Элементы DOM
+    const display = document.getElementById('display');
+    const memeText = document.getElementById('memeText');
+    const statusEl = document.getElementById('status');
+    const yanaOperator = document.getElementById('yanaOperator');
+
+    // Инициализация
+    window.onload = function() {
+        showNewMeme();
+    };
+
+    // Функции калькулятора
+    function appendNumber(num) {
+        if (isNewOperation) {
+            display.value = num;
+            isNewOperation = false;
+            updateStatus("Яна начинает считать! 🎯");
+        } else {
+            if (num === '.' && display.value.includes('.')) {
+                updateStatus("Яна: 'Вторую точку нельзя!' ❌");
+                return;
+            }
+            if (display.value === '0' && num !== '.') {
+                display.value = num;
+            } else {
+                display.value += num;
+            }
+            updateStatus("Яна добавляет " + num + " 🤓");
+        }
+    }
+
+    function clearAll() {
+        display.value = '0';
+        num1 = 0;
+        num2 = 0;
+        operator = '';
+        isNewOperation = true;
+        updateStatus("Яна всё стерла! ");
+        yanaOperator.textContent = '';
+    }
+
+    function backspace() {
+        if (display.value.length > 1) {
+            display.value = display.value.slice(0, -1);
+            updateStatus("Яна удалила циферку... 🗑️");
+        } else {
+            display.value = '0';
+            isNewOperation = true;
+            updateStatus("Остался только ноль ");
+        }
+    }
+
+    function setOperator(op) {
+        if (operator !== '') {
+            calculate();
+        }
+        num1 = parseFloat(display.value);
+        operator = op;
+        isNewOperation = true;
+
+        let opText = '';
+        switch(op) {
+            case '+': opText = 'плюс'; break;
+            case '-': opText = 'ИИСУС'; break;
+            case '×': opText = 'умножить'; break;
+            case '÷': opText = 'разделить'; break;
+        }
+        updateStatus("Яна будет " + opText + "! ⚡");
+        yanaOperator.textContent = op;
+    }
+
+    function calculate() {
+        if (operator === '') return;
+
+        num2 = parseFloat(display.value);
+        let result = 0;
+
+        switch(operator) {
+            case '+':
+                result = num1 + num2;
+                updateStatus("Яна: 'Плюс — это просто!' ");
+                break;
+            case '-':
+                result = num1 - num2;
+                updateStatus("Яна: 'Минус — тоже легкотня!' ");
+                break;
+            case '×':
+                result = num1 * num2;
+                updateStatus("Яна: 'Умножать — моя любовь!' ");
+                break;
+            case '÷':
+                if (num2 === 0) {
+                    alert("🐼 Яна: 'На ноль делить нельзя, я же не дура!'");
+                    updateStatus("Яна: 'НА НОЛЬ НЕЛЬЗЯ!' ");
+                    return;
+                }
+                result = num1 / num2;
+                updateStatus("Яна: 'Деление — это быть хуисосом 67!' ");
+                break;
+        }
+
+        // Форматируем результат
+        display.value = formatNumber(result);
+
+        const resultMemes = [
+            "Яна: 'Вот это циферка!' ",
+            "Яна: 'Я гей!' ",
+            "Яна: 'Кто не верил?' ",
+            "Яна: 'Математика — сила! Химия - мощь' ",
+            "Яна: 'Слабо повторить?' "
+        ];
+
+        setTimeout(() => {
+            updateStatus(resultMemes[Math.floor(Math.random() * resultMemes.length)]);
+        }, 500);
+
+        operator = '';
+        isNewOperation = true;
+        yanaOperator.textContent = '';
+    }
+
+    // Мемные функции
+    function showNewMeme() {
+        const randomMeme = memes[Math.floor(Math.random() * memes.length)];
+        memeText.textContent = randomMeme;
+        updateStatus("Яна высрала новый мем");
+    }
+
+    function showPanda() {
+        const pandaMessages = [
+            "🐼 Панда говорит: 'Варка/Николь канон'",
+            "🐼 Панда хочет считать с Яной",
+            "🐼 Панда: 'Давай посчитаем дилдо!'",
+            "🐼 Панда одобряет этот калькулятор",
+            "🐼 Панда любит Конову"
+        ];
+        updateStatus(pandaMessages[Math.floor(Math.random() * pandaMessages.length)]);
+    }
+
+    function showPenguin() {
+        const penguinMessages = [
+            "🐧 Пингвин: 'На льду считать легче!'",
+            "🐧 Пингвин тоже умеет считать 1488",
+            "🐧 Пингвин: 'Яна, научи меня сосать пж'",
+            "🐧 Пингвин принес рыбу для счета и по ебалу",
+            "🐧 Пингвин: 'Холодно, но считать охота!'"
+        ];
+        updateStatus(penguinMessages[Math.floor(Math.random() * penguinMessages.length)]);
+    }
+
+    // Вспомогательные функции
+    function formatNumber(num) {
+        if (Number.isInteger(num)) {
+            return num.toString();
+        } else {
+            return num.toFixed(2);
+        }
+    }
+
+    function updateStatus(text) {
+        statusEl.textContent = text;
+    }
+
+    // Поддержка клавиатуры
+    document.addEventListener('keydown', (e) => {
+        if (e.key >= '0' && e.key <= '9') appendNumber(e.key);
+        if (e.key === '.') appendNumber('.');
+        if (e.key === '+') setOperator('+');
+        if (e.key === '-') setOperator('-');
+        if (e.key === '*') setOperator('×');
+        if (e.key === '/') setOperator('÷');
+        if (e.key === 'Enter' || e.key === '=') calculate();
+        if (e.key === 'Backspace') backspace();
+        if (e.key === 'Escape') clearAll();
+    });
+</script>
+</body>
+</html>
